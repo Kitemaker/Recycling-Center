@@ -7,7 +7,6 @@ from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_model.dialog.delegate_directive import DelegateDirective
 from ask_sdk_model.dialog.elicit_slot_directive import ElicitSlotDirective
 
-
 import urllib.request
 from urllib.parse import urlencode
 from bs4 import BeautifulSoup
@@ -110,9 +109,8 @@ def find_location_handler(handler_input: HandlerInput):
 def get_location(item_data, zip):
     print('entered in the function')
     search_page  = "https://search.earth911.com/?"   
-    speech_out = "Sorry there is some problem in finding the location"
-    text_out = speech_out
-    title, distance, contact, address,materias_accepted = str(),str(),str(),str(),str()
+    speech_out = "Sorry there is some problem in finding the location"    
+    title, distance, contact, address = str(),str(),str(),str()
     try:
         
         values = {'what' : item_data, 'where' : zip, 'list_filter' : 'all', 'max_distance': '50' } 
@@ -129,6 +127,7 @@ def get_location(item_data, zip):
             for result in  item.find_all('li'):
                 try:
                     title, distance, contact, phone = "Not Avialble", "Not Avialble", "Not Avialble", "Not Avialble"
+                    address, addr1, addr2, addr3 = "","","",""
 
                     if result.find(attrs={'class':'title'}).get_text() is not None:
                         title = result.find(attrs={'class':'title'}).get_text()
@@ -139,17 +138,22 @@ def get_location(item_data, zip):
                     if  result.find(attrs={'class':'contact'}) is not None:
                         contact = result.find(attrs={'class':'contact'})
 
-                    if  contact.find( attrs = {'class':'phone'}).get_text() is not None:
-                        phone = contact.find( attrs = {'class':'phone'}).get_text()                    
+                        if  contact.find( attrs = {'class':'phone'}).get_text() is not None:
+                            phone = contact.find( attrs = {'class':'phone'}).get_text()
+
+                        if  contact.find( attrs = {'class':'address1'}).get_text() is not None:
+                            addr1 = contact.find( attrs = {'class':'address1'}).get_text()
+                        if  contact.find( attrs = {'class':'address2'}).get_text() is not None:
+                            addr2 = contact.find( attrs = {'class':'address2'}).get_text()      
+                        if  contact.find( attrs = {'class':'address3'}).get_text() is not None:
+                            addr2 = contact.find( attrs = {'class':'address3'}).get_text()                   
                     
-                    for adr in contact.find_all('p'):
-                        address = address + " " + adr.get_text()
-                        loc_data = {'Nearby Center Name':title,
-                                    'Distance': distance,
-                                    'Phone': phone,
-                                    'Address': address
-                                     }
-                        result_details.append(loc_data)
+                    address = addr1 + addr2 + addr3
+                    if address == "":
+                        address = "Not Available"
+
+                    loc_data = {'Nearby Center Name':title, 'Distance': distance, 'Phone': phone, 'Address': address.strip() }
+                    result_details.append(loc_data)
 
                 except Exception as exc:
                     print("error in finding location details {0}".format(exc))
@@ -195,7 +199,7 @@ def fallback_handler(handler_input):
         "The {} skill can't help you with that.  "
         "You can tell me item and zip code by saying, "
         "Find recycling center for CFL").format(skill_name)
-    reprompt = ("Please tell me the item and zip code")
+    reprompt = ("You can tell me item and zip code by saying, find recycling center for CFL")
     handler_input.response_builder.speak(speech).ask(reprompt)
     return handler_input.response_builder.response
 
