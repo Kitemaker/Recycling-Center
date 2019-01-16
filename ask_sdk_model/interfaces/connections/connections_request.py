@@ -35,7 +35,7 @@ class ConnectionsRequest(Request):
     :type request_id: (optional) str
     :param timestamp: Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
     :type timestamp: (optional) datetime
-    :param locale: A string indicating the user’s locale. For example: en-US.
+    :param locale: A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
     :type locale: (optional) str
     :param name: Name of the action sent by the referrer skill.
     :type name: (optional) str
@@ -69,7 +69,7 @@ class ConnectionsRequest(Request):
         :type request_id: (optional) str
         :param timestamp: Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
         :type timestamp: (optional) datetime
-        :param locale: A string indicating the user’s locale. For example: en-US.
+        :param locale: A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
         :type locale: (optional) str
         :param name: Name of the action sent by the referrer skill.
         :type name: (optional) str

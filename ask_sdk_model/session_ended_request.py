@@ -37,7 +37,7 @@ class SessionEndedRequest(Request):
     :type request_id: (optional) str
     :param timestamp: Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
     :type timestamp: (optional) datetime
-    :param locale: A string indicating the user’s locale. For example: en-US.
+    :param locale: A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
     :type locale: (optional) str
     :param reason: Describes why the session ended.
     :type reason: (optional) ask_sdk_model.session_ended_reason.SessionEndedReason
@@ -71,7 +71,7 @@ class SessionEndedRequest(Request):
         :type request_id: (optional) str
         :param timestamp: Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
         :type timestamp: (optional) datetime
-        :param locale: A string indicating the user’s locale. For example: en-US.
+        :param locale: A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
         :type locale: (optional) str
         :param reason: Describes why the session ended.
         :type reason: (optional) ask_sdk_model.session_ended_reason.SessionEndedReason

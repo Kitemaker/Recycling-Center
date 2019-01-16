@@ -37,7 +37,7 @@ class IntentRequest(Request):
     :type request_id: (optional) str
     :param timestamp: Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
     :type timestamp: (optional) datetime
-    :param locale: A string indicating the user’s locale. For example: en-US.
+    :param locale: A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
     :type locale: (optional) str
     :param dialog_state: Enumeration indicating the status of the multi-turn dialog. This property is included if the skill meets the requirements to use the Dialog directives. Note that COMPLETED is only possible when you use the Dialog.Delegate directive. If you use intent confirmation, dialogState is considered COMPLETED if the user denies the entire intent (for instance, by answering “no” when asked the confirmation prompt). Be sure to also check the confirmationStatus property on the Intent object before fulfilling the user’s request.
     :type dialog_state: (optional) ask_sdk_model.dialog_state.DialogState
@@ -71,7 +71,7 @@ class IntentRequest(Request):
         :type request_id: (optional) str
         :param timestamp: Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
         :type timestamp: (optional) datetime
-        :param locale: A string indicating the user’s locale. For example: en-US.
+        :param locale: A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
         :type locale: (optional) str
         :param dialog_state: Enumeration indicating the status of the multi-turn dialog. This property is included if the skill meets the requirements to use the Dialog directives. Note that COMPLETED is only possible when you use the Dialog.Delegate directive. If you use intent confirmation, dialogState is considered COMPLETED if the user denies the entire intent (for instance, by answering “no” when asked the confirmation prompt). Be sure to also check the confirmationStatus property on the Intent object before fulfilling the user’s request.
         :type dialog_state: (optional) ask_sdk_model.dialog_state.DialogState

@@ -18,12 +18,12 @@
 __pip_package_name__ = 'ask-sdk-dynamodb-persistence-adapter'
 __description__ = (
     'The ASK SDK DynamoDB Persistence Adapter package provides DynamoDB '
-    'Adapter, that can be used with ASK SDK Core, for persistence management')
-__url__ = 'http://developer.amazon.com/ask'
-__version__ = '0.1.3'
+    'Adapter, that can be used with ASK SDK Core, for persistence management.')
+__url__ = 'https://github.com/alexa/alexa-skills-kit-sdk-for-python'
+__version__ = '1.5.0'
 __author__ = 'Alexa Skills Kit'
 __author_email__ = 'ask-sdk-dynamic@amazon.com'
 __license__ = 'Apache 2.0'
 __keywords__ = ['ASK SDK', 'Alexa Skills Kit', 'Alexa', 'ASK SDK Core',
                 'Persistence', 'DynamoDB']
-__install_requires__ = ["boto3", "ask-sdk-core"]
+__install_requires__ = ["boto3", "ask-sdk-core>=1.1.0"]

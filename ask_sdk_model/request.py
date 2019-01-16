@@ -37,7 +37,7 @@ class Request(object):
     :type request_id: (optional) str
     :param timestamp: Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
     :type timestamp: (optional) datetime
-    :param locale: A string indicating the user’s locale. For example: en-US.
+    :param locale: A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
     :type locale: (optional) str
 
     .. note::
@@ -51,6 +51,8 @@ class Request(object):
         |
         | AlexaHouseholdListEvent.ListUpdated: :py:class:`ask_sdk_model.services.list_management.list_updated_event_request.ListUpdatedEventRequest`,
         |
+        | Alexa.Presentation.APL.UserEvent: :py:class:`ask_sdk_model.interfaces.alexa.presentation.apl.user_event.UserEvent`,
+        |
         | AlexaSkillEvent.SkillDisabled: :py:class:`ask_sdk_model.events.skillevents.skill_disabled_request.SkillDisabledRequest`,
         |
         | Display.ElementSelected: :py:class:`ask_sdk_model.interfaces.display.element_selected_request.ElementSelectedRequest`,
@@ -59,13 +61,21 @@ class Request(object):
         |
         | AlexaHouseholdListEvent.ItemsCreated: :py:class:`ask_sdk_model.services.list_management.list_items_created_event_request.ListItemsCreatedEventRequest`,
         |
+        | Reminders.ReminderUpdated: :py:class:`ask_sdk_model.services.reminder_management.reminder_updated_event_request.ReminderUpdatedEventRequest`,
+        |
         | SessionEndedRequest: :py:class:`ask_sdk_model.session_ended_request.SessionEndedRequest`,
         |
         | IntentRequest: :py:class:`ask_sdk_model.intent_request.IntentRequest`,
         |
         | AudioPlayer.PlaybackFailed: :py:class:`ask_sdk_model.interfaces.audioplayer.playback_failed_request.PlaybackFailedRequest`,
         |
+        | CanFulfillIntentRequest: :py:class:`ask_sdk_model.canfulfill.can_fulfill_intent_request.CanFulfillIntentRequest`,
+        |
+        | Reminders.ReminderStarted: :py:class:`ask_sdk_model.services.reminder_management.reminder_started_event_request.ReminderStartedEventRequest`,
+        |
         | LaunchRequest: :py:class:`ask_sdk_model.launch_request.LaunchRequest`,
+        |
+        | Reminders.ReminderCreated: :py:class:`ask_sdk_model.services.reminder_management.reminder_created_event_request.ReminderCreatedEventRequest`,
         |
         | AudioPlayer.PlaybackStopped: :py:class:`ask_sdk_model.interfaces.audioplayer.playback_stopped_request.PlaybackStoppedRequest`,
         |
@@ -81,7 +91,11 @@ class Request(object):
         |
         | AudioPlayer.PlaybackNearlyFinished: :py:class:`ask_sdk_model.interfaces.audioplayer.playback_nearly_finished_request.PlaybackNearlyFinishedRequest`,
         |
+        | Reminders.ReminderStatusChanged: :py:class:`ask_sdk_model.services.reminder_management.reminder_status_changed_event_request.ReminderStatusChangedEventRequest`,
+        |
         | AlexaHouseholdListEvent.ItemsDeleted: :py:class:`ask_sdk_model.services.list_management.list_items_deleted_event_request.ListItemsDeletedEventRequest`,
+        |
+        | Reminders.ReminderDeleted: :py:class:`ask_sdk_model.services.reminder_management.reminder_deleted_event_request.ReminderDeletedEventRequest`,
         |
         | Connections.Response: :py:class:`ask_sdk_model.interfaces.connections.connections_response.ConnectionsResponse`,
         |
@@ -122,14 +136,19 @@ class Request(object):
         'AudioPlayer.PlaybackFinished': 'ask_sdk_model.interfaces.audioplayer.playback_finished_request.PlaybackFinishedRequest',
         'AlexaSkillEvent.SkillEnabled': 'ask_sdk_model.events.skillevents.skill_enabled_request.SkillEnabledRequest',
         'AlexaHouseholdListEvent.ListUpdated': 'ask_sdk_model.services.list_management.list_updated_event_request.ListUpdatedEventRequest',
+        'Alexa.Presentation.APL.UserEvent': 'ask_sdk_model.interfaces.alexa.presentation.apl.user_event.UserEvent',
         'AlexaSkillEvent.SkillDisabled': 'ask_sdk_model.events.skillevents.skill_disabled_request.SkillDisabledRequest',
         'Display.ElementSelected': 'ask_sdk_model.interfaces.display.element_selected_request.ElementSelectedRequest',
         'AlexaSkillEvent.SkillPermissionChanged': 'ask_sdk_model.events.skillevents.permission_changed_request.PermissionChangedRequest',
         'AlexaHouseholdListEvent.ItemsCreated': 'ask_sdk_model.services.list_management.list_items_created_event_request.ListItemsCreatedEventRequest',
+        'Reminders.ReminderUpdated': 'ask_sdk_model.services.reminder_management.reminder_updated_event_request.ReminderUpdatedEventRequest',
         'SessionEndedRequest': 'ask_sdk_model.session_ended_request.SessionEndedRequest',
         'IntentRequest': 'ask_sdk_model.intent_request.IntentRequest',
         'AudioPlayer.PlaybackFailed': 'ask_sdk_model.interfaces.audioplayer.playback_failed_request.PlaybackFailedRequest',
+        'CanFulfillIntentRequest': 'ask_sdk_model.canfulfill.can_fulfill_intent_request.CanFulfillIntentRequest',
+        'Reminders.ReminderStarted': 'ask_sdk_model.services.reminder_management.reminder_started_event_request.ReminderStartedEventRequest',
         'LaunchRequest': 'ask_sdk_model.launch_request.LaunchRequest',
+        'Reminders.ReminderCreated': 'ask_sdk_model.services.reminder_management.reminder_created_event_request.ReminderCreatedEventRequest',
         'AudioPlayer.PlaybackStopped': 'ask_sdk_model.interfaces.audioplayer.playback_stopped_request.PlaybackStoppedRequest',
         'PlaybackController.PreviousCommandIssued': 'ask_sdk_model.interfaces.playbackcontroller.previous_command_issued_request.PreviousCommandIssuedRequest',
         'AlexaHouseholdListEvent.ItemsUpdated': 'ask_sdk_model.services.list_management.list_items_updated_event_request.ListItemsUpdatedEventRequest',
@@ -137,7 +156,9 @@ class Request(object):
         'AlexaHouseholdListEvent.ListCreated': 'ask_sdk_model.services.list_management.list_created_event_request.ListCreatedEventRequest',
         'AudioPlayer.PlaybackStarted': 'ask_sdk_model.interfaces.audioplayer.playback_started_request.PlaybackStartedRequest',
         'AudioPlayer.PlaybackNearlyFinished': 'ask_sdk_model.interfaces.audioplayer.playback_nearly_finished_request.PlaybackNearlyFinishedRequest',
+        'Reminders.ReminderStatusChanged': 'ask_sdk_model.services.reminder_management.reminder_status_changed_event_request.ReminderStatusChangedEventRequest',
         'AlexaHouseholdListEvent.ItemsDeleted': 'ask_sdk_model.services.list_management.list_items_deleted_event_request.ListItemsDeletedEventRequest',
+        'Reminders.ReminderDeleted': 'ask_sdk_model.services.reminder_management.reminder_deleted_event_request.ReminderDeletedEventRequest',
         'Connections.Response': 'ask_sdk_model.interfaces.connections.connections_response.ConnectionsResponse',
         'Messaging.MessageReceived': 'ask_sdk_model.interfaces.messaging.message_received_request.MessageReceivedRequest',
         'Connections.Request': 'ask_sdk_model.interfaces.connections.connections_request.ConnectionsRequest',
@@ -165,7 +186,7 @@ class Request(object):
         :type request_id: (optional) str
         :param timestamp: Provides the date and time when Alexa sent the request as an ISO 8601 formatted string. Used to verify the request when hosting your skill as a web service.
         :type timestamp: (optional) datetime
-        :param locale: A string indicating the user’s locale. For example: en-US.
+        :param locale: A string indicating the user’s locale. For example: en-US. This value is only provided with certain request types.
         :type locale: (optional) str
         """
         self.__discriminator_value = None
