@@ -1,0 +1,291 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "recycling center",
+            "intents": [
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "FindLocationIntent",
+                    "slots": [
+                        {
+                            "name": "Item",
+                            "type": "ItemType",
+                            "samples": [
+                                "wanna drop some {Item}",
+                                "Looking recycling center for {Item}",
+                                "I want to drop-off  {Item}",
+                                "I am looking for {Item}",
+                                "{Item}"
+                            ]
+                        },
+                        {
+                            "name": "Zip",
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "My Zip Code is {Zip}",
+                                "Find near {Zip}",
+                                "Zip code is {Zip}",
+                                "{Zip}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "find center",
+                        "find recycling center",
+                        "find recycling center for {Item} near {Zip}",
+                        "find center for {Item} near {Zip}",
+                        "find center near {Zip}",
+                        "find center for {Item}",
+                        "find nearest recycling center near {Zip}",
+                        "recycling center near {Zip}",
+                        "find some recycling center to drop-off  {Item} ",
+                        "please find near-by location for recycling near {Zip}",
+                        "I want to drop-off {Item} at recycling center near {Zip}",
+                        "find recycling center for {Item}",
+                        "find recycling centers near {Zip}",
+                        "find receycling center for {Item}"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "ItemType",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "Music Player"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CD"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "DVD"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "TV"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "steal"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "aluminium"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "gadget"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cell"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "phone"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "wood"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "glass bottle"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "metal"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "metal can"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "computers"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "desktop"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cell phone"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mobile"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Torch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Television"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Glass"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Bottle"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Can"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Bulb"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CFL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Battery"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Laptop"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PC"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ZipCodeType",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "three two one five four "
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "seven eight six four three"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "one two three four five"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "seven eight three four two"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "FindLocationIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "Item",
+                            "type": "ItemType",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1023000763346.1086205957941"
+                            }
+                        },
+                        {
+                            "name": "Zip",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1282173144962.63541778191"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.1023000763346.1086205957941",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Please tell me the Item you want to drop off you can say Dektop, CFL or Cell Phone?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Which Item you want to recycle you can say Dektop, CFL or Cell Phone?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1282173144962.63541778191",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Please tell Zip Code"
+                    }
+                ]
+            }
+        ]
+    }
+}
