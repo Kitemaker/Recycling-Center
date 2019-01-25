@@ -1,0 +1,11 @@
+(1) Launch skill by  "Alexa, open Recycling Center"
+(2) Once skill is started start intent  by saying  "Find center"
+(3) Provide Item Name by saying "Desktop"
+(4) Provide US  5 - digit Zip code  by saying "Seven eight six three two"
+(5) Skill shall respond by providing details for nearest Recycling Center for  drop-off. Information is also displayed on the Device ( Echo Spot, Show) . Please note that the information is displayed using Scroll Bar. User can use touch display to scroll the screen . Map of the location is also displayed.
+(6) Ask "what is recycling label" then information about recycling label shall be told and on the display "Pager" element will display various types of labels one by one - can be accessed by clicking on the page
+(7) to know about information about recycling say " How to Recycle"
+(8) tell the element name e.g. metal, glass, can,   paper
+(9) In response of step-8 Alexa gives the information and also shows the list of items on Display Interface.    once the information  is complete, user can again ask "how to recycle" or user can quit the session by saying " Stop"
+(9) User can also get information by clicking on list item details can be seen
+(10) If information is more than user can scroll the screen to see full information.

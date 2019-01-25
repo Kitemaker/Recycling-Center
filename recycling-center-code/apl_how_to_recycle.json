@@ -1,0 +1,903 @@
+{
+    "document": {
+        "type": "APL",
+        "version": "1.0",
+        "theme": "dark",
+        "import": [
+            {
+                "name": "alexa-layouts",
+                "version": "1.0.0"
+            }
+        ],
+        "resources": [
+            {
+                "description": "Stock color for the light theme",
+                "colors": {
+                    "colorTextPrimary": "#151920"
+                }
+            },
+            {
+                "description": "Stock color for the dark theme",
+                "when": "${viewport.theme == 'dark'}",
+                "colors": {
+                    "colorTextPrimary": "#f0f1ef"
+                }
+            },
+            {
+                "description": "Standard font sizes",
+                "dimensions": {
+                    "textSizeBody": 48,
+                    "textSizePrimary": 27,
+                    "textSizeSecondary": 23,
+                    "textSizeDetails": 20,
+                    "textSizeSecondaryHint": 25
+                }
+            },
+            {
+                "description": "Common spacing values",
+                "dimensions": {
+                    "spacingThin": 6,
+                    "spacingSmall": 12,
+                    "spacingMedium": 24,
+                    "spacingLarge": 48,
+                    "spacingExtraLarge": 72
+                }
+            },
+            {
+                "description": "Common margins and padding",
+                "dimensions": {
+                    "marginTop": 40,
+                    "marginLeft": 60,
+                    "marginRight": 60,
+                    "marginBottom": 40
+                }
+            }
+        ],
+        "styles": {
+            "textStyleBase": {
+                "description": "Base font description; set color and core font family",
+                "values": [
+                    {
+                        "color": "@colorTextPrimary",
+                        "fontFamily": "Amazon Ember"
+                    }
+                ]
+            },
+            "textStyleBase0": {
+                "description": "Thin version of basic font",
+                "extend": "textStyleBase",
+                "values": {
+                    "fontWeight": "100"
+                }
+            },
+            "textStyleBase1": {
+                "description": "Light version of basic font",
+                "extend": "textStyleBase",
+                "values": {
+                    "fontWeight": "300"
+                }
+            },
+            "textStyleBase2": {
+                "description": "Regular version of basic font",
+                "extend": "textStyleBase",
+                "values": {
+                    "fontWeight": "500"
+                }
+            },
+            "mixinBody": {
+                "values": {
+                    "fontSize": "@textSizeBody"
+                }
+            },
+            "mixinPrimary": {
+                "values": {
+                    "fontSize": "@textSizePrimary"
+                }
+            },
+            "mixinDetails": {
+                "values": {
+                    "fontSize": "@textSizeDetails"
+                }
+            },
+            "mixinSecondary": {
+                "values": {
+                    "fontSize": "@textSizeSecondary"
+                }
+            },
+            "textStylePrimary": {
+                "extend": [
+                    "textStyleBase1",
+                    "mixinPrimary"
+                ]
+            },
+            "textStyleSecondary": {
+                "extend": [
+                    "textStyleBase0",
+                    "mixinSecondary"
+                ]
+            },
+            "textStyleBody": {
+                "extend": [
+                    "textStyleBase1",
+                    "mixinBody"
+                ]
+            },
+            "textStyleSecondaryHint": {
+                "values": {
+                    "fontFamily": "Bookerly",
+                    "fontStyle": "italic",
+                    "fontSize": "@textSizeSecondaryHint",
+                    "color": "@colorTextPrimary"
+                }
+            },
+            "textStyleDetails": {
+                "extend": [
+                    "textStyleBase2",
+                    "mixinDetails"
+                ]
+            }
+        },
+        "layouts": {
+            "ListTemplate1": {
+                "parameters": [
+                    "backgroundImage",
+                    "title",
+                    "logo",
+                    "hintText",
+                    "listData"
+                ],
+                "item": [
+                    {
+                        "type": "Container",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "direction": "column",
+                        "items": [
+                            {
+                                "type": "Image",
+                                "source": "${backgroundImage}",
+                                "scale": "best-fill",
+                                "width": "100vw",
+                                "height": "100vh",
+                                "position": "absolute"
+                            },
+                            {
+                                "type":"TouchWrapper",
+                                "onPress":{
+                                "type":"SendEvent",
+                                "arguments": ["LogoItem","HowToRecycle",""]
+                                },
+                                "item":{
+                                "type": "AlexaHeader",
+                                "headerTitle": "${title}",
+                                "headerAttributionImage": "${logo}"
+                                }
+                            },
+                            {
+                                "type": "Sequence",
+                                "grow": 1,
+                                "height": "80vh",
+                                "scrollDirection": "vertical",
+                                "paddingLeft": "@marginLeft",
+                                "paddingRight": "@marginRight",
+                                "data": "${listData}",
+                                "numbered": true,
+                                "items": [
+                                    {
+                                        "type": "VerticalListItem",
+                                        "image": "${data.image.sources[0].url}",
+                                        "primaryText": "${data.textContent.primaryText.text}",
+                                        "secondaryText": "${data.textContent.secondaryText.text}",
+                                        "tertiaryText": "${data.textContent.tertiaryText.text}"
+                                    }
+                                ]
+                            },
+                             {
+                            "type": "AlexaFooter",
+                            "footerHint": "${payload.bodyTemplate2Data.hintText}"
+                             }
+
+                        ]
+                    }
+                ]
+            },
+            "VerticalListItem": {
+                "parameters": [
+                    "primaryText",
+                    "secondaryText",
+                    "tertiaryText",
+                    "image"
+                ],
+                "items": [
+                    {
+                        "when": "${viewport.shape == 'round'}",
+                         "type":"TouchWrapper",
+                                "onPress":{
+                                "type":"SendEvent",
+                                "arguments": ["HowToRecycleList","${ordinal}","${primaryText}"]
+                                },
+                                "item":{
+                        "type": "Container",
+                        "direction": "row",
+                        "height": 200,
+                        "width": "100%",
+                        "separator": true,
+                        "alignItems": "center",
+                        "paddingBottom": "100dp",
+                        "items": [
+                            {
+                                "type": "Text",
+                                "text": "${ordinal}",
+                                "paddingBottom": "10dp",
+                                "color": "white",
+                                "spacing": "5dp"
+                            },
+                            {
+                                "type": "Image",
+                                "when": "${image}",
+                                "source": "${image}",
+                                "height": 100,
+                                "width": 100,
+                                "spacing": 5,
+                                "scale": "best-fit",
+                                "align": "center"
+                            },
+                            {
+                                "type": "Container",
+                                "direction": "column",
+                                "spacing": 20,
+                                "items": [
+                                    {
+                                        "type": "Text",
+                                        "text": "${primaryText}",
+                                        "style": "textStyleDetail",
+                                        "grow": 1,
+                                        "shrink": 1,
+                                        "fontWeight": "300",
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "text": "${secondaryText}",
+                                        "style": "textStyleCaption",
+                                        "fontWeight": "300",
+                                        "grow": 1,
+                                        "shrink": 1,
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "text": "${tertiaryText}",
+                                        "style": "textStyleDetails",
+                                        "fontWeight": "300",
+                                        "grow": 1,
+                                        "shrink": 1,
+                                        "maxLines": 1
+                                    }
+                                ]
+                            }
+                        ]
+                    }},
+                    {
+                         "type":"TouchWrapper",
+                                "onPress":{
+                                "type":"SendEvent",
+                                "arguments": ["HowToRecycleList","${ordinal}","${primaryText}"]
+                                },
+                                "item":{
+                        "type": "Container",
+                        "direction": "row",
+                        "height": 125,
+                        "width": "100%",
+                        "alignItems": "center",
+                        "separator": true,
+                        "items": [
+                            {
+                                "type": "Text",
+                                "text": "${ordinal}",
+                                "paddingBottom": "20dp",
+                                "color": "white",
+                                "spacing": "5dp"
+                            },
+                            {
+                                "type": "Image",
+                                "when": "${image}",
+                                "source": "${image}",
+                                "height": 100,
+                                "width": 100,
+                                "align": "top",
+                                "spacing": 50,
+                                "scale": "best-fit"
+                            },
+                            {
+                                "type": "Container",
+                                "spacing": 30,
+                                "direction": "column",
+                                "items": [
+                                    {
+                                        "type": "Text",
+                                        "text": "${primaryText}",
+                                        "style": "textStyleBody",
+                                        "fontWeight": "300",
+                                        "grow": 1,
+                                        "shrink": 1,
+                                        "maxLines": 1
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "text": "${secondaryText}",
+                                        "style": "textStyleDetails",
+                                        "fontWeight": "300",
+                                        "grow": 1,
+                                        "shrink": 1,
+                                        "maxLines": 1
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "Text",
+                                "text": "${tertiaryText}",
+                                "style": "textStyleBody",
+                                "fontWeight": "300",
+                                "grow": 1,
+                                "shrink": 1,
+                                "textAlign": "right",
+                                "maxLines": 1
+                            }
+                        ]
+                    }}
+                ]
+            }
+        },
+        "mainTemplate": {
+            "parameters": [
+                "payload"
+            ],
+            "item": [
+                {
+                    "type": "ListTemplate1",
+                    "backgroundImage": "${payload.listTemplate1Metadata.backgroundImage.sources[0].url}",
+                    "title": "${payload.listTemplate1Metadata.title}",
+                    "logo": "${payload.listTemplate1Metadata.logoUrl}",
+                    "listData": "${payload.listTemplate1ListData.listPage.listItems}"
+                },
+                {
+                            "type": "AlexaFooter",
+                            "footerHint": "${payload.listTemplate1Metadata.hintText}"
+                }
+            ]
+        }
+    },
+    "dataSources": {
+        "listTemplate1Metadata": {
+            "type": "object",
+            "objectId": "lt1Metadata",
+            "backgroundImage": {
+                "contentDescription": null,
+                "smallSourceUrl": null,
+                "largeSourceUrl": null,
+                "sources": [
+                    {
+                        "url": "https://s3.amazonaws.com/aws-apl-contest/recyclingcenter/Image_Dark_Green.png",
+                        "size": "small",
+                        "widthPixels": 0,
+                        "heightPixels": 0
+                    },
+                    {
+                        "url": "https://s3.amazonaws.com/aws-apl-contest/recyclingcenter/Image_Dark_Green.png",
+                        "size": "large",
+                        "widthPixels": 0,
+                        "heightPixels": 0
+                    }
+                ]
+            },
+            "title": "How to Recycle Tips",
+            "hintTxt": "Select any item for details",
+            "logoUrl": "https://s3.amazonaws.com/aws-sumerian-ar/APL/recycling_center_launcher_logo.png"
+        },
+        "listTemplate1ListData": {
+            "type": "list",
+            "listId": "lt1Sample",
+            "totalNumberOfItems": 14,
+            "listPage": {
+                "listItems": [
+                    {
+                        "listItemIdentifier": "glass",
+                        "ordinalNumber": 1,
+                        "textContent": {
+                            "primaryText": {
+                                "type": "PlainText",
+                                "text": "Glass"
+                            },
+                            "secondaryText": {
+                                "type": "PlainText",
+                                "text": ""
+                            },
+                            "tertiaryText": {
+                                "type": "PlainText",
+                                "text": ""
+                            }
+                        },
+                        "image": {
+                            "contentDescription": null,
+                            "smallSourceUrl": null,
+                            "largeSourceUrl": null,
+                            "sources": [
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/glass-recycling-header-2.jpg",
+                                    "size": "small",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                },
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/glass-recycling-header-2.jpg",
+                                    "size": "large",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                }
+                            ]
+                        },
+                        "token": "glass"
+                    },
+                    {
+                        "listItemIdentifier": "glassBottlesandJars",
+                        "ordinalNumber": 2,
+                        "textContent": {
+                            "primaryText": {
+                                "type": "PlainText",
+                                "text": "Glass Bottles & Jars"
+                            },
+                            "secondaryText": {
+                                "type": "RichText",
+                                "text": ""
+                            },
+                            "tertiaryText": {
+                                "type": "PlainText",
+                                "text": ""
+                            }
+                        },
+                        "image": {
+                            "contentDescription": null,
+                            "smallSourceUrl": null,
+                            "largeSourceUrl": null,
+                            "sources": [
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/glass_bottles-recycling-header.jpg",
+                                    "size": "small",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                },
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/glass_bottles-recycling-header.jpg",
+                                    "size": "large",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                }
+                            ]
+                        },
+                        "token": "glassBottlesandJars"
+                    },
+                    {
+                        "listItemIdentifier": "metal",
+                        "ordinalNumber": 3,
+                        "textContent": {
+                            "primaryText": {
+                                "type": "PlainText",
+                                "text": "Metal"
+                            },
+                            "secondaryText": {
+                                "type": "RichText",
+                                "text": ""
+                            },
+                            "tertiaryText": {
+                                "type": "PlainText",
+                                "text": ""
+                            }
+                        },
+                        "image": {
+                            "contentDescription": null,
+                            "smallSourceUrl": null,
+                            "largeSourceUrl": null,
+                            "sources": [
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/How-to-Recycle-Metal-min.jpg",
+                                    "size": "small",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                },
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/How-to-Recycle-Metal-min.jpg",
+                                    "size": "large",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                }
+                            ]
+                        },
+                        "token": "metal"
+                    },
+                    {
+                        "listItemIdentifier": "steel can",
+                        "ordinalNumber": 4,
+                        "textContent": {
+                            "primaryText": {
+                                "type": "PlainText",
+                                "text": "Steel Can"
+                            },
+                            "secondaryText": {
+                                "type": "RichText",
+                                "text": ""
+                            },
+                            "tertiaryText": {
+                                "type": "PlainText",
+                                "text": ""
+                            }
+                        },
+                        "image": {
+                            "contentDescription": null,
+                            "smallSourceUrl": null,
+                            "largeSourceUrl": null,
+                            "sources": [
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/how-to-recycle-tin-or-steel-cans-min.jpg",
+                                    "size": "small",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                },
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/how-to-recycle-tin-or-steel-cans-min.jpg",
+                                    "size": "large",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                }
+                            ]
+                        },
+                        "token": "steelcan"
+                    },
+                    {
+                        "listItemIdentifier": "aluminum foil",
+                        "ordinalNumber": 5,
+                        "textContent": {
+                            "primaryText": {
+                                "type": "PlainText",
+                                "text": "Aluminum Foil"
+                            },
+                            "secondaryText": {
+                                "type": "RichText",
+                                "text": ""
+                            },
+                            "tertiaryText": {
+                                "type": "PlainText",
+                                "text": ""
+                            }
+                        },
+                        "image": {
+                            "contentDescription": null,
+                            "smallSourceUrl": null,
+                            "largeSourceUrl": null,
+                            "sources": [
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/recycling-aluminum-foil-header.jpg",
+                                    "size": "small",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                },
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/recycling-aluminum-foil-header.jpg",
+                                    "size": "large",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                }
+                            ]
+                        },
+                        "token": "aluminum foil"
+                    },
+                    {
+                        "listItemIdentifier": "Books and Magazines",
+                        "ordinalNumber": 6,
+                        "textContent": {
+                            "primaryText": {
+                                "type": "PlainText",
+                                "text": "Books and Magazines"
+                            },
+                            "secondaryText": {
+                                "type": "RichText",
+                                "text": ""
+                            },
+                            "tertiaryText": {
+                                "type": "PlainText",
+                                "text": ""
+                            }
+                        },
+                        "image": {
+                            "contentDescription": null,
+                            "smallSourceUrl": null,
+                            "largeSourceUrl": null,
+                            "sources": [
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/recycling-books-header.jpg",
+                                    "size": "small",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                },
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/recycling-books-header.jpg",
+                                    "size": "large",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                }
+                            ]
+                        },
+                        "token": "Books and Magazines"
+                    },
+
+					{
+					    "listItemIdentifier": "Cell Phones",
+                        "ordinalNumber": 7,
+                        "textContent": {
+                            "primaryText": {
+                                "type": "PlainText",
+                                "text": "Cell Phones"
+                            },
+                            "secondaryText": {
+                                "type": "RichText",
+                                "text": ""
+                            },
+                            "tertiaryText": {
+                                "type": "PlainText",
+                                "text": ""
+                            }
+                        },
+                        "image": {
+                            "contentDescription": null,
+                            "smallSourceUrl": null,
+                            "largeSourceUrl": null,
+                            "sources": [
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/recycling-cell-phone-header.jpg",
+                                    "size": "small",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                },
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/recycling-cell-phone-header.jpg",
+                                    "size": "large",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                }
+                            ]
+                        },
+                        "token": "Cell Phones"
+                    },
+					{
+					       "listItemIdentifier": "Computer Monitor",
+                        "ordinalNumber": 8,
+                        "textContent": {
+                            "primaryText": {
+                                "type": "PlainText",
+                                "text": "Computer Monitor"
+                            },
+                            "secondaryText": {
+                                "type": "RichText",
+                                "text": ""
+                            },
+                            "tertiaryText": {
+                                "type": "PlainText",
+                                "text": ""
+                            }
+                        },
+                        "image": {
+                            "contentDescription": null,
+                            "smallSourceUrl": null,
+                            "largeSourceUrl": null,
+                            "sources": [
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/Computer-Recycling-Header.jpg",
+                                    "size": "small",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                },
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/Computer-Recycling-Header.jpg",
+                                    "size": "large",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                }
+                            ]
+                        },
+                        "token": "Computer Monitor"
+                    },
+					{									
+					    "listItemIdentifier": "Electrical Appliances",
+                        "ordinalNumber": 9,
+                        "textContent": {
+                            "primaryText": {
+                                "type": "PlainText",
+                                "text": "Electrical Appliances"
+                            },
+                            "secondaryText": {
+                                "type": "RichText",
+                                "text": ""
+                            },
+                            "tertiaryText": {
+                                "type": "PlainText",
+                                "text": ""
+                            }
+                        },
+                        "image": {
+                            "contentDescription": null,
+                            "smallSourceUrl": null,
+                            "largeSourceUrl": null,
+                            "sources": [
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/Recycle-Small-Appliances.jpg",
+                                    "size": "small",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                },
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/Recycle-Small-Appliances.jpg",
+                                    "size": "large",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                }
+                            ]
+                        },
+                        "token": "Electrical Appliances"
+                    },
+                    {
+                        "listItemIdentifier": "Cardboard",
+                        "ordinalNumber": 10,
+                        "textContent": {
+                            "primaryText": {
+                                "type": "PlainText",
+                                "text": "Cardboard"
+                            },
+                            "secondaryText": {
+                                "type": "RichText",
+                                "text": ""
+                            },
+                            "tertiaryText": {
+                                "type": "PlainText",
+                                "text": ""
+                            }
+                        },
+                        "image": {
+                            "contentDescription": null,
+                            "smallSourceUrl": null,
+                            "largeSourceUrl": null,
+                            "sources": [
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/recycling-cardboard-header.jpg",
+                                    "size": "small",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                },
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/recycling-cardboard-header.jpg",
+                                    "size": "large",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                }
+                            ]
+                        },
+                        "token": "Cardboard"
+                    },
+					{
+					       "listItemIdentifier": "Cartons",
+                        "ordinalNumber": 11,
+                        "textContent": {
+                            "primaryText": {
+                                "type": "PlainText",
+                                "text": "Cartons"
+                            },
+                            "secondaryText": {
+                                "type": "RichText",
+                                "text": ""
+                            },
+                            "tertiaryText": {
+                                "type": "PlainText",
+                                "text": ""
+                            }
+                        },
+                        "image": {
+                            "contentDescription": null,
+                            "smallSourceUrl": null,
+                            "largeSourceUrl": null,
+                            "sources": [
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/recycling-cartons-header.jpg",
+                                    "size": "small",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                },
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/recycling-cartons-header.jpg",
+                                    "size": "large",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                }
+                            ]
+                        },
+                        "token": "Cartons"
+                    },
+					{
+					       "listItemIdentifier": "Newspaper",
+                        "ordinalNumber": 12,
+                        "textContent": {
+                            "primaryText": {
+                                "type": "PlainText",
+                                "text": "Newspaper"
+                            },
+                            "secondaryText": {
+                                "type": "RichText",
+                                "text": ""
+                            },
+                            "tertiaryText": {
+                                "type": "PlainText",
+                                "text": ""
+                            }
+                        },
+                        "image": {
+                            "contentDescription": null,
+                            "smallSourceUrl": null,
+                            "largeSourceUrl": null,
+                            "sources": [
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/how-to-recycle-newspaper-min-600x300.jpg",
+                                    "size": "small",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                },
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/how-to-recycle-newspaper-min-600x300.jpg",
+                                    "size": "large",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                }
+                            ]
+                        },
+                        "token": "Newspaper"
+                    },
+					{
+                        "listItemIdentifier": "Paper",
+                        "ordinalNumber": 13,
+                        "textContent": {
+                            "primaryText": {
+                                "type": "PlainText",
+                                "text": "Paper"
+                            },
+                            "secondaryText": {
+                                "type": "RichText",
+                                "text": ""
+                            },
+                            "tertiaryText": {
+                                "type": "PlainText",
+                                "text": ""
+                            }
+                        },
+                        "image": {
+                            "contentDescription": null,
+                            "smallSourceUrl": null,
+                            "largeSourceUrl": null,
+                            "sources": [
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/how-to-recycle-paper.jpg",
+                                    "size": "small",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                },
+                                {
+                                    "url": "https://s3.amazonaws.com/aws-sumerian-ar/APL/how2recycle/how-to-recycle-paper.jpg",
+                                    "size": "large",
+                                    "widthPixels": 0,
+                                    "heightPixels": 0
+                                }
+                            ]
+                        },
+                        "token": "Paper"
+                    }
+                ]
+            }
+        }
+    }
+}
