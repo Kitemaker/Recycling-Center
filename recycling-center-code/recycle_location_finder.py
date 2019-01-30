@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 #
+import ask_sdk_model.context
+
+import ask_sdk_model.device
+from ask_sdk_model.interfaces.system import system_state
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_model.ui import SimpleCard
@@ -72,45 +76,54 @@ def load_apl_document(file_path):
 
 @sb.request_handler(can_handle_func=is_request_type("LaunchRequest"))
 def launch_request_handler(handler_input: HandlerInput):
+
     # Handler for Skill Launch
     apl_doc = load_apl_document("apl_launch_recycling_center.json")
-    handler_input.response_builder.speak(launch_text).set_should_end_session(False).ask(
-        launch_reprompt_text).add_directive(
-        RenderDocumentDirective(
+    handler_input.response_builder.speak(launch_text).set_should_end_session(False).ask(launch_reprompt_text)
+    print('is_apl_supported = {0}'.format(is_apl_supported(handler_input)))
+    if is_apl_supported(handler_input):
+        handler_input.response_builder.add_directive(
+            RenderDocumentDirective(
                 token="pagerToken",
                 document=apl_doc['document'],
                 datasources=apl_doc['dataSources']
             )
-    )
+        )
+
     return handler_input.response_builder.response
 
 
 @sb.request_handler(can_handle_func=is_intent_name("LabelInfoIntent"))
 def label_info_handler(handler_input: HandlerInput):
     print('entered into LabelInfoIntent')
+
     speech = "The How2Recycle label is a voluntary, standardized labeling system that clearly communicates recycling instructions " +\
            "to the public. It involves a coalition of forward thinking brands who want their packaging to be recycled and are empowering " +\
             "consumers through smart packaging labels. A recycling Label has four parts. Part 1 tells How to Prepare Material for Recycling. " +\
             "Part 2 is an icon which tells you whether the item falls into one of four categories - Widely Recycled, Check Locally, Not Yet Recycled and  Store Drop-Off. " +\
             "Part 3 Tells you what type of material the packaging is made of. and Part 4 Tells you the specific packaging component that the label is referring to."
+    if is_apl_supported(handler_input):
+        speech = speech + " Information about parts of label are displayed. To go back, you can say go home. To quit you can say Stop"
+        handler_input.response_builder.speak(speech).set_should_end_session(False).ask(
+            launch_reprompt_text).add_directive(
+                RenderDocumentDirective(
+                    token="pagerToken",
+                    document=load_apl_document("apl_pager_labels.json")['document'],
+                    datasources= load_apl_document("apl_pager_labels.json")['dataSources']
+                )
+            ).add_directive(
+                ExecuteCommandsDirective(
+                    token="pagerToken",
+                    commands=[
+                        AutoPageCommand(
+                            component_id="pagerComponentId",
+                            duration=5000)
+                    ]
+                )
+            )
+    else:
+        handler_input.response_builder.speak(speech).set_should_end_session(True).ask(launch_reprompt_text)
 
-    handler_input.response_builder.speak(speech).set_should_end_session(True).ask(
-        launch_reprompt_text).add_directive(
-            RenderDocumentDirective(
-                token="pagerToken",
-                document=load_apl_document("apl_pager_labels.json")['document'],
-                datasources= load_apl_document("apl_pager_labels.json")['dataSources']
-            )
-        ).add_directive(
-            ExecuteCommandsDirective(
-                token="pagerToken",
-                commands=[
-                    AutoPageCommand(
-                        component_id="pagerComponentId",
-                        duration=5000)
-                ]
-            )
-        )
     return handler_input.response_builder.response
 
 
@@ -148,13 +161,16 @@ def how_to_recycle_handler(handler_input: HandlerInput):
 
         info_document = load_apl_document("apl_how_to_recycle.json")['document']
         info_datasources = load_apl_document("apl_how_to_recycle.json")['dataSources']
-        handler_input.response_builder.speak(speech).add_directive(
-                RenderDocumentDirective(
-                    token="pagerToken",
-                    document=info_document,
-                    datasources=info_datasources
+        if is_apl_supported(handler_input):
+            handler_input.response_builder.speak(speech).add_directive(
+                    RenderDocumentDirective(
+                        token="pagerToken",
+                        document=info_document,
+                        datasources=info_datasources
+                    )
                 )
-            )
+        else:
+            handler_input.response_builder.speak(speech)
 
     return handler_input.response_builder.response
 
@@ -171,6 +187,12 @@ def get_recycling_info(item):
     return speech_text
 
 
+def is_apl_supported(handler_input):
+
+    if  handler_input.request_envelope.context.system.device.supported_interfaces.alexa_presentation_apl is None:
+        return False
+    else:
+        return True
 
 @sb.request_handler(can_handle_func=is_intent_name("FindLocationIntent"))
 def find_location_handler(handler_input: HandlerInput):
@@ -220,22 +242,31 @@ def find_location_handler(handler_input: HandlerInput):
                 print(str.format("{0} =>  {1}",k,v))
                 speech = speech + str.format(" {0} is  {1}, ",k,v)
                 location_datasources['bodyTemplate2Data']['textContent']['primaryText']['text'] = speech
-            handler_input.response_builder.set_should_end_session(True).speak(speech).add_directive(
-                RenderDocumentDirective(
-                    token="pagerToken",
-                    document=location_document,
-                    datasources=location_datasources
+
+            if is_apl_supported(handler_input):
+                handler_input.response_builder.set_should_end_session(True).speak(speech).add_directive(
+                    RenderDocumentDirective(
+                        token="pagerToken",
+                        document=location_document,
+                        datasources=location_datasources
+                    )
                 )
-            )
+            else:
+                handler_input.response_builder.set_should_end_session(True).speak(speech)
+
         else:
             location_datasources['bodyTemplate2Data']['textContent']['primaryText']['text'] = sorry_text
-            handler_input.response_builder.set_should_end_session(True).speak(sorry_text).add_directive(
-                RenderDocumentDirective(
-                    token="pagerToken",
-                    document=location_document,
-                    datasources=location_datasources
+            if is_apl_supported(handler_input):
+                handler_input.response_builder.set_should_end_session(True).speak(sorry_text).add_directive(
+                    RenderDocumentDirective(
+                        token="pagerToken",
+                        document=location_document,
+                        datasources=location_datasources
+                    )
                 )
-            )
+            else:
+                handler_input.response_builder.set_should_end_session(True).speak(sorry_text)
+
             
     return handler_input.response_builder.response
 
@@ -304,6 +335,7 @@ def alexa_user_event_request_handler(handler_input: HandlerInput):
     arguments = handler_input.request_envelope.request.arguments
     request_type = handler_input.request_envelope.request.object_type
 
+
     if len(arguments) >= 3:
         item_selected = arguments[0]
         item_ordinal =  arguments[1]
@@ -330,27 +362,34 @@ def alexa_user_event_request_handler(handler_input: HandlerInput):
             print('error while fetching image in how to recycle')
         recycling_tips = get_recycling_info(item_title)
         data_source['bodyTemplate2Data']['textContent']['primaryText']['text'] = recycling_tips
-        handler_input.response_builder.speak(recycling_tips).set_should_end_session(
-            True).add_directive(
-            RenderDocumentDirective(
-                token="listToken",
-                document=load_apl_document("apl_how_to_recycle_single_item.json")['document'],
-                datasources=data_source
+        if is_apl_supported(handler_input):
+            handler_input.response_builder.speak(recycling_tips).set_should_end_session(
+                True).add_directive(
+                RenderDocumentDirective(
+                    token="listToken",
+                    document=load_apl_document("apl_how_to_recycle_single_item.json")['document'],
+                    datasources=data_source
+                )
             )
-        )
+        else:
+            handler_input.response_builder.speak(recycling_tips).set_should_end_session(True)
+
 
     return handler_input.response_builder.response
 
 def navigate_home_handler(handler_input):
-    speech_text = ""
-    handler_input.response_builder.speak(speech_text).set_should_end_session(
-         True).add_directive(
-        RenderDocumentDirective(
+    speech_text = "To start again you can say Find recycling center for cell phone"
+    apl_supported = handler_input.request_envelope.context.system.device.supported_interfaces.alexa_presentation_apl
+    print('apl_supported = {0}'.format(apl_supported))
+    handler_input.response_builder.speak(speech_text).set_should_end_session(False)
+    if is_apl_supported(handler_input):
+        handler_input.response_builder.add_directive(
+            RenderDocumentDirective(
                 token="listToken",
                 document=load_apl_document("apl_launch_recycling_center.json")['document'],
                 datasources=load_apl_document("apl_launch_recycling_center.json")['dataSources']
             )
-    )
+        )
 
 @sb.request_handler(
     can_handle_func=lambda input :
@@ -363,17 +402,21 @@ def launch_request_handler(handler_input):
 @sb.request_handler(can_handle_func=is_intent_name("AMAZON.HelpIntent"))
 def help_intent_handler(handler_input):
     # Handler for Help Intent
-    help_text = "I can find recycling center for items near your location. To start you can say Find recycling center for cell phone"
+    help_text = "I can find recycling center for near your location. To start you can say Find recycling center for cell phone"
     apl_doc = load_apl_document("apl_launch_recycling_center.json")
     launch_datasources = apl_doc['dataSources']
     launch_datasources['bodyTemplate2Data']['textContent']['primaryText']['text'] = help_text
-    handler_input.response_builder.speak(help_text).set_should_end_session(True).ask(help_text).add_directive(
-                RenderDocumentDirective(
-                    token="pagerToken",
-                    document=apl_doc['document'],
-                    datasources=launch_datasources
+    if is_apl_supported(handler_input):
+        handler_input.response_builder.speak(help_text).set_should_end_session(True).ask(help_text).add_directive(
+                    RenderDocumentDirective(
+                        token="pagerToken",
+                        document=apl_doc['document'],
+                        datasources=launch_datasources
+                    )
                 )
-            )
+    else:
+        handler_input.response_builder.speak(help_text).set_should_end_session(True).ask(help_text)
+
     return handler_input.response_builder.response
 
 
@@ -387,13 +430,17 @@ def cancel_and_stop_intent_handler(handler_input):
     apl_doc = load_apl_document("apl_launch_recycling_center.json")
     launch_datasources = apl_doc['dataSources']
     launch_datasources['bodyTemplate2Data']['textContent']['primaryText']['text'] = speech_text
-    return handler_input.response_builder.speak(speech_text).response.add_directive(
-                RenderDocumentDirective(
-                    token="pagerToken",
-                    document=apl_doc['document'],
-                    datasources=launch_datasources
-                )
+    if is_apl_supported(handler_input):
+        handler_input.response_builder.speak(speech_text).response.add_directive(
+            RenderDocumentDirective(
+                token="home",
+                document=apl_doc['document'],
+                datasources=launch_datasources
             )
+        )
+    else:
+        handler_input.response_builder.speak(speech_text)
+    return
 
 
 @sb.request_handler(can_handle_func=is_request_type("SessionEndedRequest"))

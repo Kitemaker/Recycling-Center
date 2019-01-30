@@ -192,16 +192,11 @@
                             "position": "absolute"
                         },
                         {
-                             "type":"TouchWrapper",
-                                "onPress":{
-                                "type":"SendEvent",
-                                "arguments": ["LogoItem","LaunchTemplate",""]
-                                },
-                                "item":{
                             "type": "AlexaHeader",
                             "headerTitle": "${payload.bodyTemplate2Data.title}",
                             "headerAttributionImage": "${payload.bodyTemplate2Data.logoUrl}"
-                        }},
+
+                        },
                         {
                             "type": "Container",
                             "direction": "row",
