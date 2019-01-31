@@ -104,6 +104,7 @@ def label_info_handler(handler_input: HandlerInput):
             "Part 3 Tells you what type of material the packaging is made of. and Part 4 Tells you the specific packaging component that the label is referring to."
     if is_apl_supported(handler_input):
         speech = speech + " Information about parts of label are displayed. To go back, you can say go home. To quit you can say Stop"
+        print(speech)
         handler_input.response_builder.speak(speech).set_should_end_session(False).ask(
             launch_reprompt_text).add_directive(
                 RenderDocumentDirective(
@@ -409,7 +410,7 @@ def help_intent_handler(handler_input):
     if is_apl_supported(handler_input):
         handler_input.response_builder.speak(help_text).set_should_end_session(True).ask(help_text).add_directive(
                     RenderDocumentDirective(
-                        token="pagerToken",
+                        token="Help",
                         document=apl_doc['document'],
                         datasources=launch_datasources
                     )
@@ -430,17 +431,17 @@ def cancel_and_stop_intent_handler(handler_input):
     apl_doc = load_apl_document("apl_launch_recycling_center.json")
     launch_datasources = apl_doc['dataSources']
     launch_datasources['bodyTemplate2Data']['textContent']['primaryText']['text'] = speech_text
+    handler_input.response_builder.speak(speech_text).set_should_end_session(True)
     if is_apl_supported(handler_input):
-        handler_input.response_builder.speak(speech_text).response.add_directive(
+        handler_input.response_builder.response.add_directive(
             RenderDocumentDirective(
-                token="home",
+                token="CanelorStop",
                 document=apl_doc['document'],
                 datasources=launch_datasources
             )
         )
-    else:
-        handler_input.response_builder.speak(speech_text)
-    return
+
+    return handler_input.response_builder.response
 
 
 @sb.request_handler(can_handle_func=is_request_type("SessionEndedRequest"))
