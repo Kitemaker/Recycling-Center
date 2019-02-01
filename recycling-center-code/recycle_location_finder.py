@@ -258,7 +258,7 @@ def find_location_handler(handler_input: HandlerInput):
         else:
             location_datasources['bodyTemplate2Data']['textContent']['primaryText']['text'] = sorry_text
             if is_apl_supported(handler_input):
-                handler_input.response_builder.set_should_end_session(True).speak(sorry_text).add_directive(
+                handler_input.response_builder.set_should_end_session(False).speak(sorry_text).add_directive(
                     RenderDocumentDirective(
                         token="pagerToken",
                         document=location_document,
@@ -266,7 +266,7 @@ def find_location_handler(handler_input: HandlerInput):
                     )
                 )
             else:
-                handler_input.response_builder.set_should_end_session(True).speak(sorry_text)
+                handler_input.response_builder.set_should_end_session(False).speak(sorry_text)
 
             
     return handler_input.response_builder.response
@@ -343,7 +343,7 @@ def alexa_user_event_request_handler(handler_input: HandlerInput):
         item_title = arguments[2]
 
     if item_selected == "LogoItem":
-        navigate_home_handler(handler_input)
+        navigate_home(handler_input)
         return handler_input.response_builder.response
 
     if item_selected == 'HowToRecycleList':
@@ -378,11 +378,11 @@ def alexa_user_event_request_handler(handler_input: HandlerInput):
 
     return handler_input.response_builder.response
 
-def navigate_home_handler(handler_input):
-    speech_text = "To start again you can say Find recycling center for cell phone"
+def navigate_home(handler_input):
+    speech_text = ""
     apl_supported = handler_input.request_envelope.context.system.device.supported_interfaces.alexa_presentation_apl
     print('apl_supported = {0}'.format(apl_supported))
-    handler_input.response_builder.speak(speech_text).set_should_end_session(False)
+    handler_input.response_builder.speak(speech_text).set_should_end_session(True)
     if is_apl_supported(handler_input):
         handler_input.response_builder.add_directive(
             RenderDocumentDirective(
@@ -396,8 +396,8 @@ def navigate_home_handler(handler_input):
     can_handle_func=lambda input :
         is_intent_name("AMAZON.NavigateHomeIntent")(input) or
         is_intent_name("HomeIntent")(input))
-def launch_request_handler(handler_input):
-    navigate_home_handler(handler_input)
+def navigate_home_handler(handler_input):
+    navigate_home(handler_input)
     return handler_input.response_builder.response
       
 @sb.request_handler(can_handle_func=is_intent_name("AMAZON.HelpIntent"))
@@ -433,7 +433,7 @@ def cancel_and_stop_intent_handler(handler_input):
     launch_datasources['bodyTemplate2Data']['textContent']['primaryText']['text'] = speech_text
     handler_input.response_builder.speak(speech_text).set_should_end_session(True)
     if is_apl_supported(handler_input):
-        handler_input.response_builder.response.add_directive(
+        handler_input.response_builder.add_directive(
             RenderDocumentDirective(
                 token="CanelorStop",
                 document=apl_doc['document'],
